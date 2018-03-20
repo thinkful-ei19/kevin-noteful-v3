@@ -3,12 +3,16 @@
 const mongoose = require('mongoose');
 
 const noteSchema = mongoose.Schema({
-  title: {type: String, index: true},
-  content: {type: String, index: true},
-  created: {type: Date, default: Date.now()},
+  title: { type: String, index: true },
+  content: { type: String, index: true },
+  created: { type: Date, default: Date.now() },
 });
 
-noteSchema.index({ title: 'text', content: 'text'});
+noteSchema.index(
+  { title: 'text', content: 'text' },
+  {
+    weights: { title: 1, content: 2 }
+  });
 
 noteSchema.set('toObject', {
   transform: function (doc, ret) {

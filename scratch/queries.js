@@ -133,24 +133,14 @@ const Note = require('../models/note');
 //   });
 
 
-  /* ----- Delete Note ----- */
+/* ----- Delete Note ----- */
 
-  mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI)
   .then(() => {
     const id = '000000000000000000000006';
     // const id = req.params.id;
 
-    const obj = {
-      title: 'testing',
-      content: 'testing testing 123'
-    };
-
-    // let obj = {
-    //   title: req.body.title,
-    //   content: req.body.content
-    // };
-
-    return Note.findByIdAndUpdate(id, obj)
+    return Note.findByIdAndRemove(id)
       .then(results => {
         // res.json(results);
         console.log(results);
