@@ -23,7 +23,6 @@ router.get('/notes', (req, res, next) => {
         .sort('created')
         .then(results => {
           res.json(results);
-          console.log(results);
         })
         .catch(console.error);
     })
@@ -36,6 +35,7 @@ router.get('/notes', (req, res, next) => {
     .catch(err => {
       console.error(`ERROR: ${err.message}`);
       console.error(err);
+      next(err);
     });
 
 });
@@ -43,8 +43,29 @@ router.get('/notes', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/notes/:id', (req, res, next) => {
 
-  console.log('Get a Note');
-  res.json({ id: 2 });
+  mongoose.connect(MONGODB_URI)
+  .then(() => {
+    const id = req.params.id;
+    console.log('THIS IS THE ID', id);
+
+    return Note.findById(id)
+      .then(results => {
+        console.log('THESE ARRE THE RESULTS', results);
+        res.json(results);
+      })
+      .catch(console.error);
+  })
+  .then(() => {
+    return mongoose.disconnect()
+      .then(() => {
+        console.info('Disconnected');
+      });
+  })
+  .catch(err => {
+    console.error(`ERROR: ${err.message}`);
+    console.error(err);
+    next(err);
+  });
 
 });
 
