@@ -39,9 +39,9 @@ const Note = require('../models/note');
 
 /* ----- Get Note By ID ----- */
 // mongoose.connect(MONGODB_URI)
-//   .then(() => {
-//     const id = '000000000000000000000006';
-//     // const id = req.params.id;
+// .then(() => {
+//   const id = '000000000000000000000006';
+//   // const id = req.params.id;
 
 //     return Note.findById(id)
 //       .then(results => {
@@ -65,20 +65,92 @@ const Note = require('../models/note');
 
 /* ----- Create New Note (POST) ----- */
 
-mongoose.connect(MONGODB_URI)
-  .then(() => {
+// mongoose.connect(MONGODB_URI)
+//   .then(() => {
 
-    let obj = {
+//     let obj = {
+//       title: 'testing',
+//       content: 'testing testing 123'
+//     };
+
+//     // let obj = {
+//     //   title: req.body.title,
+//     //   content: req.body.content
+//     // };
+
+//     return Note.create(obj)
+//       .then(results => {
+//         // res.json(results);
+//         console.log(results);
+//       })
+//       .catch(console.error);
+//   })
+//   .then(() => {
+//     return mongoose.disconnect()
+//       .then(() => {
+//         console.info('Disconnected');
+//       });
+//   })
+//   .catch(err => {
+//     console.error(`ERROR: ${err.message}`);
+//     console.error(err);
+//   });
+
+
+/* ----- Update Existing Note (PUT) ----- */
+
+// mongoose.connect(MONGODB_URI)
+//   .then(() => {
+//     const id = '000000000000000000000006';
+//     // const id = req.params.id;
+
+//     const obj = {
+//       title: 'testing',
+//       content: 'testing testing 123'
+//     };
+
+//     // let obj = {
+//     //   title: req.body.title,
+//     //   content: req.body.content
+//     // };
+
+//     return Note.findByIdAndUpdate(id, obj)
+//       .then(results => {
+//         // res.json(results);
+//         console.log(results);
+//       })
+//       .catch(console.error);
+//   })
+//   .then(() => {
+//     return mongoose.disconnect()
+//       .then(() => {
+//         console.info('Disconnected');
+//       });
+//   })
+//   .catch(err => {
+//     console.error(`ERROR: ${err.message}`);
+//     console.error(err);
+//   });
+
+
+  /* ----- Delete Note ----- */
+
+  mongoose.connect(MONGODB_URI)
+  .then(() => {
+    const id = '000000000000000000000006';
+    // const id = req.params.id;
+
+    const obj = {
       title: 'testing',
       content: 'testing testing 123'
     };
 
     // let obj = {
-    //   title: req.params.title,
-    //   content: req.params.body
+    //   title: req.body.title,
+    //   content: req.body.content
     // };
 
-    return Note.create(obj)
+    return Note.findByIdAndUpdate(id, obj)
       .then(results => {
         // res.json(results);
         console.log(results);
@@ -95,11 +167,3 @@ mongoose.connect(MONGODB_URI)
     console.error(`ERROR: ${err.message}`);
     console.error(err);
   });
-
-
-  /* ----- Update Existing Note (PUT) ----- */
-
-
-
-
-  /* ----- Delete Note ----- */
