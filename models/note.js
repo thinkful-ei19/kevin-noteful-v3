@@ -2,10 +2,10 @@
 
 const mongoose = require('mongoose');
 
-const noteSchema = mongoose.Schema({
-  title: { type: String, index: true },
-  content: { type: String, index: true },
-  created: { type: Date, default: Date.now() },
+const noteSchema = new mongoose.Schema({
+  title: { type: String },
+  content: { type: String },
+  created: { type: Date, default: Date.now },
 });
 
 noteSchema.index(

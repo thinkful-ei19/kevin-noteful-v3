@@ -9,154 +9,81 @@ const Note = require('../models/note');
 /* ========== GET/READ ALL ITEM ========== */
 router.get('/notes', (req, res) => {
 
-  mongoose.connect(MONGODB_URI)
-    .then(() => Note.createIndexes())
-    .then(() => {
-      const searchTerm = req.query.searchTerm;
+  const searchTerm = req.query.searchTerm;
 
-      if (searchTerm) {
-        return Note.find(
-          { $text: { $search: searchTerm } },
-          { score: { $meta: 'textScore' } })
-          .sort({ score: { $meta: 'textScore' } })
-          .then(results => {
-            res.json(results);
-          })
-          .catch(console.error);
-      } else {
-        return Note.find()
-        .then(results => {
-          res.json(results);
-        });
-      }
-    })
-    .then(() => {
-      return mongoose.disconnect()
-        .then(() => {
-          console.info('Disconnected');
-        });
-    })
-    .catch(err => {
-      console.error(`ERROR: ${err.message}`);
-      console.error(err);
-    });
-
+  if (searchTerm) {
+    return Note.find(
+      { $text: { $search: searchTerm } },
+      { score: { $meta: 'textScore' } })
+      .sort({ score: { $meta: 'textScore' } })
+      .then(results => {
+        res.json(results);
+      })
+      .catch(console.error);
+  } else {
+    return Note.find()
+      .then(results => {
+        res.json(results);
+      });
+  }
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/notes/:id', (req, res) => {
 
-  mongoose.connect(MONGODB_URI)
-    .then(() => {
-      const id = req.params.id;
+  const id = req.params.id;
 
-      return Note.findById(id)
-        .then(results => {
-          res.json(results);
-        })
-        .catch(console.error);
+  return Note.findById(id)
+    .then(results => {
+      res.json(results);
     })
-    .then(() => {
-      return mongoose.disconnect()
-        .then(() => {
-          console.info('Disconnected');
-        });
-    })
-    .catch(err => {
-      console.error(`ERROR: ${err.message}`);
-      console.error(err);
-    });
-
+    .catch(console.error);
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/notes', (req, res) => {
+  let obj = {
+    title: req.body.title,
+    content: req.body.content
+  };
 
-  mongoose.connect(MONGODB_URI)
-    .then(() => {
-
-      let obj = {
-        title: req.body.title,
-        content: req.body.content
-      };
-
-      return Note.create(obj)
-        .then(results => {
-          res.json(results);
-          console.log(results);
-        })
-        .catch(console.error);
+  return Note.create(obj)
+    .then(result => {
+      res.location(`/notes/${result.id}`).status(201).json(result);
+      // console.log(result);
     })
-    .then(() => {
-      return mongoose.disconnect()
-        .then(() => {
-          console.info('Disconnected');
-        });
-    })
-    .catch(err => {
-      console.error(`ERROR: ${err.message}`);
-      console.error(err);
-    });
-
+    .catch(console.error);
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/notes/:id', (req, res) => {
 
-  mongoose.connect(MONGODB_URI)
-    .then(() => {
-      const id = req.params.id;
+  const id = req.params.id;
 
-      let obj = {
-        title: req.body.title,
-        content: req.body.content
-      };
+  let obj = {
+    title: req.body.title,
+    content: req.body.content
+  };
 
-      return Note.findByIdAndUpdate(id, obj, { new: true })
-        .then(results => {
-          res.json(results);
-          console.log(results);
-        })
-        .catch(console.error);
+  return Note.findByIdAndUpdate(id, obj, { new: true })
+    .then(results => {
+      res.json(results);
+      console.log(results);
     })
-    .then(() => {
-      return mongoose.disconnect()
-        .then(() => {
-          console.info('Disconnected');
-        });
-    })
-    .catch(err => {
-      console.error(`ERROR: ${err.message}`);
-      console.error(err);
-    });
-
+    .catch(console.error);
 });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/notes/:id', (req, res) => {
 
-  mongoose.connect(MONGODB_URI)
-    .then(() => {
-      const id = req.params.id;
+  const id = req.params.id;
 
-      return Note.findByIdAndRemove(id)
-        .then(results => {
-          res.json(results);
-          console.log(results);
-        })
-        .catch(console.error);
+  return Note.findByIdAndRemove(id)
+    .then(results => {
+      res.json(results);
+      console.log(results);
     })
-    .then(() => {
-      return mongoose.disconnect()
-        .then(() => {
-          console.info('Disconnected');
-        });
-    })
-    .catch(err => {
-      console.error(`ERROR: ${err.message}`);
-      console.error(err);
-    });
-
+    .catch(console.error);
 });
 
 module.exports = router;
