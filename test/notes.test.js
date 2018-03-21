@@ -16,7 +16,7 @@ chai.use(chaiHttp);
 
 
 
-describe('Noteful api notes', function () {
+describe('Noteful v3 notes', function () {
   before(function () {
     return mongoose.connect(TEST_MONGODB_URI);
   });
@@ -37,10 +37,10 @@ describe('Noteful api notes', function () {
   });
 
   // TESTS
-  describe('DELETE /api/notes/:id', function () {
+  describe('DELETE /v3/notes/:id', function () {
     it('should delete an item', function () {
       return chai.request(app)
-        .delete('/api/notes/000000000000000000000000')
+        .delete('/v3/notes/000000000000000000000000')
         .then(function (res) {
           expect(res).to.have.status(204);
         });
@@ -48,7 +48,7 @@ describe('Noteful api notes', function () {
   });
 
 
-  describe('PUT /api/notes/:id', function () {
+  describe('PUT /v3/notes/:id', function () {
     it('should update an item', function () {
       const newItem = {
         'title': 'The best article about cats ever!',
@@ -56,7 +56,7 @@ describe('Noteful api notes', function () {
         'tags': []
       };
       return chai.request(app)
-        .put('/api/notes/000000000000000000000000')
+        .put('/v3/notes/000000000000000000000000')
         .send(newItem)
         .then(function (res) {
           expect(res).to.have.status(201);
@@ -71,7 +71,7 @@ describe('Noteful api notes', function () {
   });
 
 
-  describe('POST /api/notes', function () {
+  describe('POST /v3/notes', function () {
     it('should create and return a new item when provided valid data', function () {
       const newItem = {
         'title': 'The best article about cats ever!',
@@ -79,9 +79,9 @@ describe('Noteful api notes', function () {
         'tags': []
       };
       let body;
-      // 1) first, call the api
+      // 1) first, call the v3
       return chai.request(app)
-        .post('/api/notes')
+        .post('/v3/notes')
         .send(newItem)
         .then(function (res) {
           body = res.body;
@@ -102,15 +102,15 @@ describe('Noteful api notes', function () {
     });
   });
 
-  describe('GET /api/notes/:id', function () {
+  describe('GET /v3/notes/:id', function () {
     it('should return correct notes', function () {
       let data;
       // 1) first, call the database
       return Note.findOne().select('id title content')
         .then(_data => {
           data = _data;
-          // 2) **then** call the api
-          return chai.request(app).get(`/api/notes/${data.id}`);
+          // 2) **then** call the v3
+          return chai.request(app).get(`/v3/notes/${data.id}`);
         })
         .then((res) => {
           expect(res).to.have.status(200);
@@ -127,14 +127,14 @@ describe('Noteful api notes', function () {
     });
   });
 
-  describe('GET /api/notes', function () {
+  describe('GET /v3/notes', function () {
     it('should return the correct number of Notes', function () {
-      // 1) call the database and the api
+      // 1) call the database and the v3
       const dbPromise = Note.find();
-      const apiPromise = chai.request(app).get('/api/notes');
+      const v3Promise = chai.request(app).get('/v3/notes');
       // 2) wait for both promises to resolve using `Promise.all`
-      return Promise.all([dbPromise, apiPromise])
-        // 3) **then** compare database results to api response
+      return Promise.all([dbPromise, v3Promise])
+        // 3) **then** compare database results to v3 response
         .then(([data, res]) => {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
