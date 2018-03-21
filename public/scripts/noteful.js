@@ -136,7 +136,7 @@ const noteful = (function () {
           store.notes = response;
           render();
         });
-    });
+    }); 
   }
 
 
