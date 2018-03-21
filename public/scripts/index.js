@@ -4,7 +4,7 @@
 $(document).ready(function () {
   noteful.bindEventListeners();
 
-  api.search('/api/notes')
+  api.search('/v3/notes')
     .then(response => {
       store.notes = response;
       noteful.render();
