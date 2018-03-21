@@ -67,7 +67,7 @@ router.put('/notes/:id', (req, res) => {
 
   return Note.findByIdAndUpdate(id, obj, { new: true })
     .then(results => {
-      res.json(results);
+      res.status(201).json(results);
       console.log(results);
     })
     .catch(console.error);
@@ -80,7 +80,7 @@ router.delete('/notes/:id', (req, res) => {
 
   return Note.findByIdAndRemove(id)
     .then(results => {
-      res.json(results);
+      res.status(204).json(results);
       console.log(results);
     })
     .catch(console.error);

@@ -36,13 +36,41 @@ describe('Noteful api notes', function () {
     return mongoose.disconnect();
   });
 
-  describe('test', function () {
-    it('shall pass', function () {
-      return true;
+  // TESTS
+  describe('DELETE /api/notes/:id', function () {
+    it('should delete an item', function () {
+      return chai.request(app)
+        .delete('/api/notes/000000000000000000000000')
+        .then(function (res) {
+          expect(res).to.have.status(204);
+        });
     });
   });
 
-  // TESTS
+
+  describe('PUT /api/notes/:id', function () {
+    it('should update an item', function () {
+      const newItem = {
+        'title': 'The best article about cats ever!',
+        'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
+        'tags': []
+      };
+      return chai.request(app)
+        .put('/api/notes/000000000000000000000000')
+        .send(newItem)
+        .then(function (res) {
+          expect(res).to.have.status(201);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.include.keys('id', 'title', 'content');
+          expect(res.body.id).to.equal('000000000000000000000000');
+          expect(res.body.title).to.equal(newItem.title);
+          expect(res.body.content).to.equal(newItem.content);
+        });
+    });
+  });
+
+
   describe('POST /api/notes', function () {
     it('should create and return a new item when provided valid data', function () {
       const newItem = {
